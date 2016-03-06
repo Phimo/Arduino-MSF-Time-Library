@@ -1,0 +1,541 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>msfTime.h MSF Time Decoder...</title>
+</head>
+
+<body style="font-family: Arial; font-size: 10pt">
+
+<h2 align="center"> msfTime Version 2.7.0 COMPATIBLE WITH THE ESP8266 WIFI MODULE</h2>
+<p align="left"><br>
+ A class to decode the MSF Time Signal from Anthorn, Cumbria, UK Inspired by Richard Jarkman's original MSFTime library but with a different
+approach. The makeTime() method is borrowed from the Time library by Michael Margolis
+You are free to use this library as you see fit as long as this text remains with it!<br>
+<br>
+ Copyright 2014, 2015 &amp; 2016 Phil Morris &lt;<a href="http://www.lydiard.plus.com">www.lydiard.plus.com</a>&gt;</p>
+
+<p align="left"><b><i><font color="#0000FF">TIME DATA AVAILABLE AT THE START OF THE NEW MINUTE:</font></i></b></p>
+
+<p align="left">The variables available to the user are:</p>
+
+<p align="left"><b><font size="2" face="Arial">
+ uint8_t TimeAvailable</font></b></p>
+
+<blockquote>
+
+<p align="left"><font size="2" face="Arial">Set when time and date data has been decoded successfully at the exact start of&nbsp;the 500 ms START pulse so, if &quot;timeAvailable&quot; is "true", set the RTC or Time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; library "NOW"</font></p>
+
+</blockquote>
+
+<p align="left"><b><font face="Arial" size="2">
+ uint8_t TimeReceived</font></b></p>
+
+<blockquote>
+
+<p align="left"><font face="Arial" size="2">Set during the final 500ms of the current minute</font></p>
+
+</blockquote>
+
+<p align="left"><b><font face="Arial" size="2">
+ uint8_t ParityResult</font></b></p>
+
+<blockquote>
+
+<p align="left"><font face="Arial" size="2">The result of the Parity check (see
+the table below)</font></p>
+
+</blockquote>
+
+<p align="left"><b><font face="Arial" size="2">uint8_t Bst</font></b></p>
+
+<blockquote>
+
+<p align="left"><font face="Arial" size="2">true = BST, false = GMT</font></p>
+
+</blockquote>
+
+<p align="left"><b><font face="Arial" size="2">
+ uint8_t BstSoon</font></b></p>
+
+<blockquote>
+
+<p align="left"><font face="Arial" size="2">true = BST imminent</font></p>
+
+</blockquote>
+
+<p align="left"><b><font face="Arial" size="2">
+ uint16_t DutPos</font></b></p>
+
+<blockquote>
+
+<p align="left"><font face="Arial" size="2"> DUT1 Positive value in ms</font></p>
+
+</blockquote>
+
+<p align="left"><b><font face="Arial" size="2">
+ uint16_t DutNeg</font></b></p>
+
+<blockquote>
+
+<p align="left"><font face="Arial" size="2"> DUT1 Negative value in ms</font></p>
+
+</blockquote>
+
+<p align="left"><b><font face="Arial" size="2">
+ uint8_t NumSeconds</font></b></p>
+
+<blockquote>
+
+<p align="left"><font face="Arial" size="2">The number of seconds received since
+the last minute start pulse (0 - 59)</font></p>
+
+</blockquote>
+
+<p align="left"><b><font face="Arial" size="2">
+ int8_t LeapSecond</font></b></p>
+
+<blockquote>
+
+<p align="left"><font face="Arial" size="2">Normally "0" but will change to either "-1" or "1" if a leap second is deducted/added</font></p>
+
+</blockquote>
+
+<p align="left"><b><font face="Arial" size="2">
+ unit8_t rtcBuffer[7)</font></b></p>
+
+<blockquote>
+
+<p align="left"><font face="Arial" size="2"> Buffer containing the time values for setting an RTC in BCD*</font></p>
+
+</blockquote>
+
+<p align="left"><b><font face="Arial" size="2">
+ time_t TimeTime</font></b></p>
+
+<blockquote>
+
+<p align="left"><font face="Arial" size="2">A Time library time_t compatible for
+Time/RTC library use</font></p>
+
+</blockquote>
+<p align="left">
+<br>
+The rtc buffer is filled with BCD values in this order which is the DS1307 &amp; DS3231
+RTC format:
+<b><br>
+</b>
+<br>
+ rtcBuffer[0] = 0<br>
+ rtcBuffer[1] = Minute<br>
+ rtcBuffer[2] = Hour<br>
+ rtcBuffer[3] = Day<br>
+ rtcBuffer[4] = Date<br>
+ rtcBuffer[5] = Month<br>
+ rtcBuffer[6] = Year (two digits)<br>
+<br>
+<b><font color="#0000FF"><i>ADDITIONAL METHODS:</i></font></b><br>
+<br>
+<b>
+ uint8_t msf.bcdToDec(uint8_t _bcd)&nbsp;&nbsp;&nbsp; </b>Convertt the rtcBuffer values to Decimal numbers</p>
+
+<p align="left">
+<b>void msf.RxON(uint8_t)</b>&nbsp;&nbsp;&nbsp; To switch the receiver ON/OFF, LOW = ON, HIGH = OFF, the default is LOW<br>
+<br>
+<b>uint8_t msf.RxIsOn()&nbsp;&nbsp;&nbsp;</b> To return the current state of the PON Pin.<br>
+<br>
+<b><i><font color="#0000FF">CONFIGURING THE LIBRARY:</font></i></b><br>
+<br>
+<b><i><u>
+ Constants available for configuration are:</u></i></b></p>
+
+<table border="0" cellspacing="0" cellpadding="3">
+  <tr>
+    <td valign="top"><font size="2"><b>
+ MSF_PULSE_LOW&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+ MSF_PULSE_HIGH<br>
+ MSF_PAD_0MS<br>
+ MSF_PAD_5MS<br>
+ MSF_PAD_10MS<br>
+ MSF_PAD_15MS<br>
+ MSF_PAD_20MS<br>
+ MSF_PAD_25MS<br>
+ MSF_PAD_30MS<br>
+ MSF_NO_PIN</b></font></td>
+    <td valign="top"><font size="2"> MSF "off" pulse is LOW<br>
+      MSF "off" pulse is HIGH<br>
+      add 0 ms to the input pulses<br>
+add 5 ms to the input pulses<br>
+ add 10 ms to the input pulses<br>
+ add 15 ms to the input pulses<br>
+ add 20 ms to the input pulses<br>
+ add 25 ms to the input pulses<br>
+ add 30 ms to the input pulses<br>
+denoted and unused pin value = -1</font></td>
+  </tr>
+</table>
+<p align="left">
+<br>
+<b><i><u>Byte offsets for the rtcBuffer BCD data:</u></i></b></p>
+
+<table border="0" cellspacing="0" cellpadding="3">
+  <tr>
+    <td valign="top"><font size="2"><b> MSF_YEAR<br>
+ MSF_MONTH<br>
+ MSF_DATE<br>
+ MSF_DAY<br>
+ MSF_HOUR<br>
+ MSF_MINUTE<br>
+ MSF_SECOND</b></font></td>
+    <td valign="top"><font size="2"> pointer to the year Byte of the rtcBuffer<br>
+ pointer to the month Byte of the rtcBuffer<br>
+ pointer to the date Byte of the rtcBuffer<br>
+ pointer to the day Byte of the rtcBuffer<br>
+ pointer to the hour Byte of the rtcBuffer<br>
+ pointer to the minute Byte of the rtcBuffer<br>
+ pointer to the second Byte of the rtcBuffer</font></td>
+  </tr>
+</table>
+<p align="left"><b>example: uint8_t myYear = msf.rtcBuffer[MSF_YEAR]; </b>gives
+the Year value in BCD.<br>
+<br>
+<b>example: uint8_t&nbsp; myYear = msf.bcdToDec(msf.rtcBuffer[MSF_DATE]);</b>
+gives the Year value in Decimal'<br>
+<br>
+<b><i><u>
+ Constants available for information (after the "begin" statement):</u></i><br>
+</b></p>
+
+<table border="0" cellspacing="0" cellpadding="3">
+  <tr>
+    <td valign="top"><b>
+ <font size="2">
+ MSF_BOARD_TYPE<br>
+      <br>
+ MSF_AVR_TYPE<br>
+      <br>
+ MSF_INT_PINS</font></b></td>
+    <td valign="top"><font size="2">The Arduino board type e.g. "UNO"<br>
+      <br>
+      A string of the AVR type if defined e.g. "ATmega328(P)"<br>
+      <br>
+      The number of interrupt pins on the defined AVR device<br>
+      For the ESP8266 it contains the total number of GPIO pins as almost<br>
+ all GPIO pins are configurable as interrupt pins. Invalid pins<br>
+ are returned as MSF_NO_PIN</font></td>
+  </tr>
+</table>
+<p>
+<table border="1" cellspacing="0" cellpadding="3">
+  <tr>
+    <td valign="middle">
+<b><font size="2">
+Arduino Interrupt Number:</font></b></td>
+    <td valign="middle"><b><font size="2">0</font></b></td>
+    <td valign="middle"><b><font size="2">1</font></b></td>
+    <td valign="middle"><b><font size="2">2</font></b></td>
+    <td valign="middle"><b><font size="2">3</font></b></td>
+    <td valign="middle"><b><font size="2">4</font></b></td>
+    <td valign="middle"><b><font size="2">5</font></b></td>
+    <td valign="middle"><b><font size="2">6</font></b></td>
+    <td valign="middle"><b><font size="2">7</font></b></td>
+    <td valign="middle"><b><font size="2">8</font></b></td>
+    <td valign="middle"><b><font size="2">9</font></b></td>
+    <td valign="middle"><b><font size="2">10</font></b></td>
+    <td valign="middle"><b><font size="2">11</font></b></td>
+    <td valign="middle"><b><font size="2">12</font></b></td>
+    <td valign="middle"><b><font size="2">13</font></b></td>
+    <td valign="middle"><b><font size="2">14</font></b></td>
+    <td valign="middle"><b><font size="2">15</font></b></td>
+    <td valign="middle"><b><font size="2">16</font></b></td>
+  </tr>
+  <tr>
+    <td valign="middle"><font size="2"><b>UNO I/O Pins</b></font></td>
+    <td valign="middle"><font size="2">2</font></td>
+    <td valign="middle"><font size="2">3</font></td>
+    <td valign="middle"></td>
+    <td valign="middle"></td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+  </tr>
+  <tr>
+    <td valign="middle"><font size="2"><b>Mega2560 I/O Pins</b></font></td>
+    <td valign="middle"><font size="2">2</font></td>
+    <td valign="middle"><font size="2">3</font></td>
+    <td valign="middle"><font size="2">21</font></td>
+    <td valign="middle"><font size="2">20</font></td>
+    <td valign="middle"><font size="2">19</font></td>
+    <td valign="middle"><font size="2">18</font></td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+  </tr>
+  <tr>
+    <td valign="middle"><font size="2"><b>ESP8266 GPIO Pins</b></font></td>
+    <td valign="middle"><font size="2">0</font></td>
+    <td valign="middle"><font size="2">1</font></td>
+    <td valign="middle"><font size="2">2</font></td>
+    <td valign="middle"><font size="2">3</font></td>
+    <td valign="middle"><font size="2">4</font></td>
+    <td valign="middle"><font size="2">5</font></td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle">&nbsp;</td>
+    <td valign="middle"><font size="2">12</font></td>
+    <td valign="middle"><font size="2">13</font></td>
+    <td valign="middle"><font size="2">14</font></td>
+    <td valign="middle"><font size="2">15</font></td>
+    <td valign="middle"><font size="2">16</font></td>
+  </tr>
+</table>
+<p align="left">
+ The msfTime library has pre-defined digital pin tables for Arduino interrupt numbers for the most<br>
+ popular board types as well as the ATmega1284P AVR and the ESP8266 Wi-Fi module when used with the<br>
+Arduino/ESP8266 IDE.</p>
+
+<p align="left">Here are the definitions from the msfTime.h file for the Arduino UNO (ATmega328P):</p>
+
+<p align="left">#if defined (__AVR_ATmega8__) || defined(__AVR_ATmega48__) || defined (__AVR_ATmega48P__) || defined (__AVR_ATmega88__) || defined (__AVR_ATmega88P__) || defined (__AVR_ATmega168__) || defined (__AVR_ATmega168P__) || defined (__AVR_ATmega328P__)</p>
+
+<blockquote>
+<p align="left">
+	#define MSF_BOARD_TYPE &quot;UNO/NANO/PRO MINI ETC."<br>
+	#define MSF_AVR_TYPE 			"ATmega8/48/88/168/328(P)"<br>
+	#define MSF_INT_PINS 			2<br>
+	static const int8_t interruptPins[MSF_INT_PINS] = {2,3};</p>
+
+</blockquote>
+<p align="left">#endif</p>
+
+<p align="left">
+The specified interrupt number, 0 or 1 for the UNO, is mapped to the
+ interruptPins[] array. The user can add their own definitions entries using the above format for other Arduino board types or
+ AVRs.</p>
+
+<p align="left">
+ <b><i><font color="#0000FF">STARTING THE LIBRARY:</font></i></b></p>
+
+<p align="left">
+ The library is pre-configured as "msf" but you can create your own instance if you like:<br>
+<br>
+ msfTime myMsf;<br>
+<br>
+ To start msfTime: (see the available constructors below)*</p>
+
+<table border="1" cellspacing="0" cellpadding="3">
+  <tr>
+    <td valign="middle"><font size="2"><b>
+ &lt;Interrupt Number&gt;</b></font></td>
+    <td valign="middle" align="left"><font size="2"> The default interrupt number as assigned by the variant file for the AVR or board</font></td>
+  </tr>
+  <tr>
+    <td valign="middle"><font size="2"><b>
+ &lt;Interrupt Pin></b></font></td>
+    <td valign="middle" align="left"><font size="2"> The Arduino Dx input pin for the specified interrupt</font></td>
+  </tr>
+  <tr>
+    <td valign="middle"><font size="2"><b>
+ &lt;Padding&gt;&nbsp;</b></font></td>
+    <td valign="middle" align="left"><font size="2"> The number of milli seconds to add to the incoming pulse if pulses are too short</font></td>
+  </tr>
+  <tr>
+    <td valign="middle"><font size="2"><b>
+ &lt;MSF Polarity></b></font></td>
+    <td valign="middle" align="left"><font size="2"> The level of the Carrier OFF signal from the MSF receiver, HIGH or LOW, can be
+      MSF_PULSE_LOW or MSF_PULSE_HIGH</font></td>
+  </tr>
+  <tr>
+    <td valign="middle"><font size="2"><b>
+ &lt;PON Pin></b></font></td>
+    <td valign="middle" align="left"><font size="2"> &lt;optional> a pin that can be used to turn the MSF receiver ON/OFF</font></td>
+  </tr>
+  <tr>
+    <td valign="middle"><font size="2"><b>
+ &lt;LED Pin></b></font></td>
+    <td valign="middle" align="left"><font size="2"> &lt;optional> a pin that can be attached to a LED (with resistor) to show the MSF pulses.The default is ON (LOW)</font></td>
+  </tr>
+</table>
+<p align="left">
+ The default values are &lt;MSF Polarity> = HIGH, &lt;PON Pin> = MSF_NO_PIN, &lt;LED Pin> = MSF_NO_PIN</p>
+
+<p align="left"><b>&lt;Padding&gt;:</b><br>
+<br>
+ The library requires that MSF pulses are not less tham 100ms, 200ms, 300ms and 500ms.
+In the unlikely event that your MSF receiver outputs pulses that are SHORTER than the required<br>
+ pulses, you can add padding in ms to make up the shortfall. The symptoms of "short" pulses is
+dropped seconds even when the signal appears perfect.<br>
+<br>
+<b>
+ Padding Time definitions:</b><br>
+<br>
+ MSF_PAD_0MS<br>
+ MSF_PAD_5MS<br>
+ MSF_PAD_10MS<br>
+ MSF_PAD_15MS<br>
+ MSF_PAD_20MS<br>
+ MSF_PAD_25MS<br>
+ MSF_PAD_30MS</p>
+
+<p align="left"><b>These constructors calculate the Arduino Dx pin from the supplied
+&lt;Interrupt Number&gt;:</b></p>
+
+<p align="left">int8_t msf.begin(&lt;Interrupt Number>, &lt;Padding&gt;);<br>
+int8_t msf.begin(&lt;Interrupt Number>, &lt;Padding&gt;, &lt;MSF Polarity>);<br>
+int8_t msf.begin(&lt;Interrupt Number>, &lt;Padding&gt;, &lt;MSF Polarity>, &lt;PON Pin>);<br>
+int8_t msf.begin(&lt;Interrupt Number>, &lt;Padding&gt;, &lt;MSF Polarity>, &lt;PON Pin>, &lt;LED Pin>);</p>
+
+<p align="left"><b>This constructor requires the specification of ALL parameters including the
+Arduino pin number:</b></p>
+
+<p align="left">int8_t msf.begin(&lt;Interrupt Number>, &lt;Interrupt Pin>, &lt;Padding&gt;, &lt;MSF Polarity>, &lt;PON Pin>, &lt;LED Pin>);</p>
+
+<p align="left">The begin method returns the Arduino pin number that the
+specified &lt;Interrupt Number&gt; is related to. If begin fails, -1 (MSF_NO_PIN)
+is returned.</p>
+
+<p align="left">if(msf.begin(&lt;Interrupt Number&gt;, &lt;Padding&gt;, &lt;MSF
+Polarity&gt;, &lt;PON Pin&gt;, &lt;LED Pin) &gt;)<br>
+ {<br>
+&nbsp;&nbsp;&nbsp; Serial.println("msfTime startup OK!");<br>
+&nbsp;&nbsp;&nbsp; Serial.println(MSF_BOARD_TYPE);<br>
+&nbsp;&nbsp;&nbsp; Serial.println(MSF_AVR_TYPE);<br>
+&nbsp;&nbsp;&nbsp; Serial.println(MSF_INT_PINS);<br>
+ }<br>
+ else<br>
+ {<br>
+&nbsp;&nbsp;&nbsp; Serial.println("msfTime startup Failed!");<br>
+ }<br>
+<br>
+ or:<br>
+<br>
+ int8_t result = msf.begin(Interrupt Number, Padding Time, MSF Polarity, PON Pin, LED Pin);<br>
+ if(result >= 0) Serial.println("msfTime startup OK!");<br>
+ else Serial.println("msfTime startup Failed!");<br>
+<br>
+ You get the idea...<br>
+<br>
+ To detect when valid time is available use the msf.TimeAvailable flag which is set within a few microseconds<br>
+ of the start of the new minute which is when you synchronise the time:<br>
+<br>
+	if(msf.TimeAvailable)<br>
+	{<br>
+&nbsp;&nbsp;&nbsp; msf.TimeAvailable = 0;	// YOU MUST CLEAR THE FLAG<br>
+&nbsp;&nbsp;&nbsp; /* your code goes here */<br>
+	}<br>
+<br>
+<b>
+ PLEASE NOTE:</b> As the correct time from the MSF transmitter is only available at the start
+of the new minute it is not possible (at this time) to use the setSyncProvider() function of the Time library
+TimeTime is provided for manual setting of the Time library using the setTime(time_t) function like this:<br>
+<br>
+ For the Time library:<br>
+<br>
+ 	if(msf.TimeAvailable)<br>
+	{<br>
+&nbsp;&nbsp;&nbsp; msf.TimeAvailable = 0;	// YOU MUST CLEAR THE FLAG<br>
+&nbsp;&nbsp;&nbsp; setTime(msf.TimeTime);<br>
+	}<br>
+<br>
+ or for a RTC device using the Wire library:<br>
+<br>
+ 	if(msf.TimeAvailable)<br>
+	{<br>
+&nbsp;&nbsp;&nbsp; msf.TimeAvailable = 0;	// YOU MUST CLEAR THE FLAG<br>
+&nbsp;&nbsp;&nbsp; Wire.beginTransmission(&lt;RTC I2C address>);<br>
+&nbsp;&nbsp;&nbsp; Wire.write(0);	// the first (seconds) register<br>
+&nbsp;&nbsp;&nbsp; for(uint8_t x;x&lt;7;x++)<br>
+&nbsp;&nbsp;&nbsp; {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wire.write(msf.rtcBuffer[x]);<br>
+&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp; Wire.endTransmission();<br>
+	}<br>
+<br>
+<b><i>
+ IF msf.TimeAvailable IS NOT SEEN use msf.TimeReceived to aid DEBUGGING!<br>
+</i></b>
+<br>
+ msf.TimeReceived is available as a warning that the time is about to change. It is set to
+&quot;true&quot; during the final 500ms of the minute if the end of frame marker has been received. Parity is also checked
+so you can see why TimeAvailable is not being set:<br>
+<br>
+ if(msf.TimeReceived > 0) Serial.println(msf.ParityResult);<br>
+<br>
+<b>
+ msf.ParityReult values:<br>
+</b>
+<br>
+ 0	Parity Good, no problems<br>
+ 1	Year Data Parity Error<br>
+ 2	Month Data Parity Error<br>
+ 3	Weekday Parity Error<br>
+ 4	Time Data Parity Error<br>
+<br>
+<b> CONSIDERATIONS:</b><br>
+<br>
+ The time available when the <b> msf.TimeAvailable</b> flag is set is within 1ms of the actual UTC time
+but, and this is a big but, the <b> msf.TimeAvailable</b> flag must be checked frequently and any other
+program actions that delay the checking of the <b> msf.TimeAvailable</b> flag will effect the accuracy
+so, don't get caught up in slow routines or delay loops.<br>
+<br>
+ You can use the <b> msf.NumSeconds</b> counter to see if a time change is imminent.
+<b> msf.NumSeconds</b> gives the current number of seconds received since the start of the minute but, the
+<b>msf.NumSeconds</b> counter is always a few milliseconds slow.&nbsp;<br>
+<br>
+ The MSF signal is NOT guaranteed to be available 24/7/365. Official planned outages are detailed on the
+National Physical Laboratory website at:<br>
+<br>
+ http://www.npl.co.uk/science-technology/time-frequency/products-and-services/time/msf-outages<br>
+<br>
+ In addition to the planned outages faults can occur which means that MSF time should never be relied upon
+as the sole time source. Common practice makes use of a RTC (Real Time Clock) module
+which would be used as the actual time source. The RTC would be sysnchronised with the MSF time at regular intervals.<br>
+<br>
+ I DO NOT recommend the DS1307 RTC device as it is far too inaccurate. The best device is the DS3231 RTC.<br>
+<br>
+ During planned outages, which normally take place during daylight hours, the MSF transmitter may still output
+a carrier which will almost certainly be interrupted by either random pulses or interference. It is possible
+that enough pulses may be detected and decoded by the MSF receiver and the msfTime library to provide
+valid time data BUT this time data will almost certainly be incorrect e.g. the wrong time and or date can be
+decoded! It has been known for the MSF station to transmit incorrect time and date information during outages.<br>
+<br>
+ It is therefore not a good idea to try and synchronise the RTC with MSF time during daylight hours. I suggest
+scheduling synchronisation to begin at 01:00 hours (the time being taken from the RTC).
+The MSF time can then be sampled every minute until a valid time has been received and the RTC has been synchronised.</p>
+
+<p align="left"><b>It should not be necessary to synchronise more than once
+every 24 hours!<br>
+</b>
+<br>
+ The <b> msf.BstSoon</b> flag will be set at 00:59 on the morning of the last
+Sunday in March and it will remain in force for 61 minutes until 02:00 when the <b> msf.Bst</b> flag will
+be set true. However msf.BstSoon does NOT indicate that BST is about to end so,
+just arrange your main synchronisation at 02:00 and watch the msf.Bst flag.<br>
+<br>
+ BST starts at 02:00 on the morning of the last Sunday in March and ends at 02:00 on the morning of the last Sunday in October.</p>
+
+</body>
+
+</html>
