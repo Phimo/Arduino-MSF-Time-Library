@@ -8,4 +8,6 @@ The library also provides a time_t compatible value representing the seconds tha
 
 Various flags and values are provided to indicate BST, BST imminent, Leap Second and UT1 vs UTC difference known as DUT1.
 
+Inspired by Richard Jarkman's original MSFTime library but with a different approach.
+
 Under construction...
