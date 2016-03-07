@@ -65,13 +65,13 @@
 
 /* USER CONFIGURATION */
 #define DUT_POSITIVE 0b11111111		// binary Byte, the DUT1 Positive value (see above)
-#define DUT_NEGATIVE 0b0		    // binary Byte, the DUT1 Negative value (see above)
-#define BST_IMMINENT false 			// BST is about to start "false" or "true"
-#define BST false          			// BST is active "false" or "true"
-#define LEAP_SECOND 0      			// "-1", "0" or "1" only (see above)
-#define PIN_CARRIER 13     			// the output pin for the MSF signal with LED
-const uint8_t C_ON = LOW;  			// the logic level when the Carrier is ON
-#define PULSE_PADDING 10    // added time in ms for generated pulses
+#define DUT_NEGATIVE 0b0		       // binary Byte, the DUT1 Negative value (see above)
+#define BST_IMMINENT false 			   // BST is about to start "false" or "true"
+#define BST false          			   // BST is active "false" or "true"
+#define LEAP_SECOND 0      			   // "-1", "0" or "1" only (see above)
+#define PIN_CARRIER 13     			   // the output pin for the MSF signal with LED
+const uint8_t C_ON = LOW;  			   // the logic level when the Carrier is ON
+#define PULSE_PADDING 10         // added time in ms for generated pulses
 
 // START DATE & TIME
 #define START_YEAR 2016
