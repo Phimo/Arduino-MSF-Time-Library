@@ -10,7 +10,7 @@ printF	KEYWORD1
 # Methods and Functions (KEYWORD2)
 #######################################
 printf	KEYWORD2
-stprintf	KEYWORD2
+strprintf	KEYWORD2
 #######################################
 # Instances (KEYWORD2)
 #######################################
