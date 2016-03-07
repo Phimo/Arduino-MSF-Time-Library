@@ -1,10 +1,8 @@
 /************************************************************************************
- msfTime.h Version 2.7.0 COMPATIBLE WITH THE ESP8266 WIFI MODULE
+ msfTime.h Version 1.0.0 COMPATIBLE WITH THE ESP8266 WIFI MODULE
 
  A class to decode the MSF Time Signal from Anthorn, Cumbria, UK
- Inspired by Richard Jarkman's original MSFTime library but with a different
- approach.
-
+ 
  You are free to use this library as you see fit as long as this text remains with it!
  Copyright 2014, 2015 & 2016 Phil Morris <www.lydiard.plus.com>
 **************************************************************************************/
