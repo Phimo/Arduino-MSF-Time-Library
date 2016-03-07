@@ -13,6 +13,7 @@
 #define printf(format, ...) StreamPrint_progmem(Serial,PSTR(format),##__VA_ARGS__)
 // stprintf (Stream Print Formatted) method modified from the Streamprint method from http://www.utopiamechanicus.com	
 #define stprintf(stream,format, ...) StreamPrint_progmem(stream,PSTR(format),##__VA_ARGS__)
+#define strprintf(stream,format, ...) StreamPrint_progmem(stream,PSTR(format),##__VA_ARGS__)
 
 	void StreamPrint_progmem(Print &out,PGM_P format,...)
 {
