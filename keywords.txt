@@ -12,20 +12,20 @@ MsfTimeLib	KEYWORD1
 # Methods and Functions (KEYWORD2)
 ##################################
 
-begin KEYWORD2
+begin	KEYWORD2
 
 ######################
 # Constants (LITERAL1)
 ######################
 
-TimeAvailable LITERAL1
-TimeReceived  LITERAL1
-ParityResult  LITERAL1
-RxSecs  LITERAL1
-Bst LITERAL1
-BstSoon LITERAL1
-DutPos  LITERAL1
-DutNeg  LITERAL1
-TimeTime  LITERAL1
-LeapSecond  LITERAL1
-NumSeconds  LITERAL1
+TimeAvailable	LITERAL1
+TimeReceived	LITERAL1
+ParityResult	LITERAL1
+RxSecs	LITERAL1
+Bst	LITERAL1
+BstSoon	LITERAL1
+DutPos	LITERAL1
+DutNeg	LITERAL1
+TimeTime	LITERAL1
+LeapSecond	LITERAL1
+NumSeconds	LITERAL1
